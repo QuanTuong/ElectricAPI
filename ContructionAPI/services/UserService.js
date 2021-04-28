@@ -3,7 +3,7 @@ const ACCOUNT = require("../entities/S_ACCOUNT");
 const generalSer = require("../middlewares/generalfuntion");
 
 //Create funtion Admin reset password for Account
-const adminResetPassword = async (req, res, next) => {
+const adminResetPasswordAll = async (req, res, next) => {
   try {
     if (generalSer.isAdmin(req.user)) {
       const account = await ACCOUNT.findOne({
@@ -44,7 +44,7 @@ const adminResetPassword = async (req, res, next) => {
 };
 
 //Only owner can change the password
-const changePassword = async (req, res, next) => {
+const changePasswordAll = async (req, res, next) => {
   try {
     const { password, new_password } = req.body;
     if (!password)
@@ -80,11 +80,11 @@ const changePassword = async (req, res, next) => {
 };
 
 //did not check org_code
-const signUp = async (req, res, next) => {
+// defautl value of role = 1 
+// Only use to add new User using for Web
+const signUpUser = async (req, res, next) => {
   try {
     const newUser = new ACCOUNT(req.body);
-
-    if (newUser.role > user.role) {
       const checkExist = await ACCOUNT.findOne({
         $or: [
           { account_name: newUser.account_name },
@@ -105,6 +105,7 @@ const signUp = async (req, res, next) => {
       } else {
         newUser.password = await generalSer.hashPassword(req.body.account_name);
         newUser.status = 0;
+        newUser.role = 1;
 
         newUser.modified_by = req.user.account_name;
         newUser.created_by = req.user.account_name;
@@ -118,22 +119,19 @@ const signUp = async (req, res, next) => {
           message: "add user succesfully",
         });
       }
-    } else {
-      return res
-        .status(403)
-        .json({ success: false, code: 403, message: "permision denied" });
-    }
   } catch (error) {
     console.log(error);
     next(error);
   }
 };
 
-const signIn = async (req, res, next) => {
+const signInUser = async (req, res, next) => {
   try {
     const token = "Bearer " + generalSer.encodedToken(req.user._id, "12h");
     res.setHeader("Authorization", token);
     const user = req.user.toObject();
+    delete user.password;
+    delete user.role;
     if (user.status == 0) {
       return res.status(200).json({
         success: true,
@@ -147,8 +145,6 @@ const signIn = async (req, res, next) => {
         .status(403)
         .json({ success: false, code: 403, message: "Access denied" });
     } else {
-      delete user.password;
-      delete user.role;
       return res
         .status(200)
         .json({ success: true, code: 200, message: "", user: user });
@@ -158,9 +154,21 @@ const signIn = async (req, res, next) => {
   }
 };
 
+const getListUser = async (req, res, next) => {
+
+  console.log(req.user.org_code);
+  const condition ={$and: [{org_code:{$regex:new RegExp('^'+req.user.org_code, 'i')}},{role: 1}]} ;
+  console.log(condition);
+  
+  const listUsers = await ACCOUNT.find(condition);
+
+  return res.status(200).json({success: true, code: 200, user: listUsers});
+}
+
 module.exports = {
-  adminResetPassword,
-  signUp,
-  signIn,
-  changePassword,
+  adminResetPasswordAll,
+  signUpUser,
+  signInUser,
+  changePasswordAll,
+  getListUser
 };

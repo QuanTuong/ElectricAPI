@@ -7,12 +7,14 @@ const cloudinary = require('cloudinary').v2;
 const passport = require('passport');
 //const logger = require('morgan');
 
-const routerUser = require('./controllers/AccountController');
+const routerUser = require('./controllers/UserController');
 
 const mongoose = require('mongoose');
 
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 const ACCOUNT = require("./entities/S_ACCOUNT");
 const middleSer = require("./middlewares/generalfuntion");
@@ -67,6 +69,23 @@ app.use(function(req, res, next) {
 	req.header('Access-Control-Allow-Headers', '*');
 	next();
 });
+
+const swaggerOptions ={
+	swaggerDefinition:{
+		info:{
+			title: "Account & Device API",
+			description: " Managerment Accounts and Devices",
+			contact:{
+				email: "maituongwork@gmail.com"
+			},
+			servers:["http://localhost:3000"]
+		}
+	},
+	apis: ["./controllers/UserController.js"]
+}
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/swagger-ui/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 app.use(bodyParser.json());
 
 //app.use(passport.initialize())
