@@ -24,6 +24,7 @@ const AccountSchema = new Schema({
     employee_id:{
         type: String    //Remember get references
     },
+    //Identify code
     org_code:{
         type: String,
         required:true

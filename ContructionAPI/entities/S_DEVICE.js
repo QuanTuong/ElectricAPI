@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const S_DEVICE = new Schema({
+const DeviceSchema = new Schema({
     device_name:{
         type: String,
         require:true
@@ -14,15 +14,17 @@ const S_DEVICE = new Schema({
         type: String,
         require: true
     },
+    //Indentify code 
     org_code:{
         type: String,
         require: true
     },
     active:{
-        type: String,
-        require: true
+        type: Number,
+        require: true, 
+        default:0
     },
-    create_by:{
+    created_by:{
         type: String,
         require:true
     },
@@ -34,5 +36,5 @@ const S_DEVICE = new Schema({
     timestamps:true
 })
 
-const S_DEVICE = mongoose.model('S_DEVICE',S_DEVICE);
+const S_DEVICE = mongoose.model('S_DEVICE',DeviceSchema);
 module.exports= S_DEVICE;
