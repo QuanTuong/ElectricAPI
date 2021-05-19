@@ -171,8 +171,7 @@ const getListUser = async (req, res, next) => {
 
   const condition = {
     $and: [
-      { org_code: { $regex: new RegExp("^" + req.user.org_code, "i") } },
-      { org_code: { $ne: req.user.org_code } },
+      { org_code: req.user.org_code },
       { role: 1 },
     ],
   };
@@ -221,7 +220,7 @@ const updateInfoUser = async (req, res, next) => {
       }
 
       if (mobile) {
-        if (await ACCOUNT.findOne({ monile: mobile })) {
+        if (await ACCOUNT.findOne({ mobile: mobile })) {
           return res
             .status(400)
             .json({
@@ -261,8 +260,7 @@ const findUserByMobileOrEmail = async (req, res, next) => {
   if(!mobile && !email) {return res.status(400).json({success:false,code:400,message:"Info searching is required!"});}
   else{
   const userFound = await ACCOUNT.findOne({$and:[{$or:[{mobile:mobile},{email:email}]},
-    { org_code: { $regex: new RegExp("^" + req.user.org_code, "i") } },
-    { org_code: { $ne: req.user.org_code } },
+    { org_code: { $regex:  req.user.org_code } },
     { role: 1 },
   ]});
   return res.status(200).json({success:true,code:200,message:"",user:userFound})
