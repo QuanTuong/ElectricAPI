@@ -127,15 +127,14 @@ addAdmin = async () => {
       fullname: "Nguyễn Song Hoàng",
       email: "admin@gmail.com",
       mobile: "123456789",
-      org_code: "F0",
+      org_code: "F0F",
       status: 0,
       role: 0,
     });
     userAdmin.password = await middleSer.hashPassword("nsh2021");
     userAdmin.created_by = await userAdmin.account_name;
     userAdmin.modified_by = await userAdmin.account_name;
-    console.log(userAdmin);
-    userAdmin.save();
+    await userAdmin.save();
 
     const user1 = new ACCOUNT({
       account_name: "user1",
@@ -143,7 +142,7 @@ addAdmin = async () => {
       fullname: "The first user name",
       email: "user1@gmail.com",
       mobile: "111111111",
-      org_code: "F0F1",
+      org_code: "F0F",
       status: 0,
       role: 1,
     });
@@ -158,7 +157,7 @@ addAdmin = async () => {
       fullname: "The second user name",
       email: "user2@gmail.com",
       mobile: "2222222222",
-      org_code: "F0F2",
+      org_code: "F0F",
       status: 0,
       role: 1,
     });
@@ -166,6 +165,21 @@ addAdmin = async () => {
     user2.created_by = await userAdmin.account_name;
     user2.modified_by = await userAdmin.account_name;
     user2.save();
+
+    const user3 = new ACCOUNT({
+      account_name: "user3",
+      password: "user3",
+      fullname: "The thirty user name",
+      email: "user3@gmail.com",
+      mobile: "3333333333",
+      org_code: "F0F",
+      status: 0,
+      role: 1,
+    });
+    user3.password = await middleSer.hashPassword("user3");
+    user3.created_by = await userAdmin.account_name;
+    user3.modified_by = await userAdmin.account_name;
+    user3.save();
 
     const account1 = new ACCOUNT({
       account_name: "account1",
@@ -177,17 +191,47 @@ addAdmin = async () => {
       status: 0,
       role: 2,
     });
-    account1.password = await middleSer.hashPassword("user2");
+    account1.password = await middleSer.hashPassword("account1");
     account1.created_by = await userAdmin.account_name;
     account1.modified_by = await userAdmin.account_name;
     account1.save();
+
+    const account2 = new ACCOUNT({
+      account_name: "account2",
+      password: "account2",
+      fullname: "The second account name",
+      email: "account2@gmail.com",
+      mobile: "1122325225",
+      org_code: "F0F",
+      status: 0,
+      role: 2,
+    });
+    account2.password = await middleSer.hashPassword("account2");
+    account2.created_by = await userAdmin.account_name;
+    account2.modified_by = await userAdmin.account_name;
+    account2.save();
+
+    const account3 = new ACCOUNT({
+      account_name: "account3",
+      password: "account3",
+      fullname: "The thirty account name",
+      email: "account3@gmail.com",
+      mobile: "6389652868",
+      org_code: "F0F",
+      status: 0,
+      role: 2,
+    });
+    account3.password = await middleSer.hashPassword("account3");
+    account3.created_by = await userAdmin.account_name;
+    account3.modified_by = await userAdmin.account_name;
+    account3.save();
   }
 };
-addAdmin();
+ addAdmin();
 //Error handler function
 
 //Start server
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 4000);
 app.listen(app.get("port"), function () {
   console.log("Server is listening at port " + app.get("port"));
 });
