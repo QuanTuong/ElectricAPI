@@ -98,8 +98,6 @@ const updateDevice = async (req, res, next) => {
         { _id: { $ne: updateDevice._id } },
       ],
     });
-
-    console.log(checkExist);
     if (checkExist) {
       return res.status(400).json({
         success: false,
@@ -125,7 +123,24 @@ const updateDevice = async (req, res, next) => {
   }
 };
 
+const deleteDevice = async (req, res, next) => {
+  const { deviceId } = req.params;
+
+  const passed = await generalSer.isAccess(req.user);
+  if(!passed) {     return res.status(403).json({success:false,code:403,message:"permission denied!"});}
+  else{
+    const deviceFound = await DEVICE.findOne({_id:deviceId});
+  if(!deviceFound){
+    return res.status(400).json({success:false,code:400,message:"id is incorrect!"});
+  }else {
+    await DEVICE.findByIdAndDelete(deviceId);
+    return res.status(200).json({success:true,code:200,message:"deleted"});
+  }
+  }
+};
+
 module.exports = {
   addNewDevice,
-  updateDevice
+  updateDevice, 
+  deleteDevice
 };

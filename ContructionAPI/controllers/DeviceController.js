@@ -13,4 +13,7 @@ router.route('/new')
 router.route('/update/:deviceId')
     .put(passport.authenticate('jwt', { session: false }),deviceService.updateDevice)
 
+router.route('/delete/:deviceId')
+    .delete(passport.authenticate('jwt', { session: false }),deviceService.deleteDevice);
+
 module.exports = router

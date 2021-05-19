@@ -5,31 +5,31 @@ const passport = require('passport')
 const { session } = require('passport')
 require("../middlewares/passport")
 
-const AccountService = require("../services/UserService")
+const UserService = require("../services/UserService")
 
 
 router.route("/list")
-    .get(passport.authenticate('jwt', { session: false }),AccountService.getListUser);
+    .get(passport.authenticate('jwt', { session: false }),UserService.getListUser);
 router.route("/search-user")
-    .get(passport.authenticate('jwt', { session: false }),AccountService.findUserByMobileOrEmail)
+    .get(passport.authenticate('jwt', { session: false }),UserService.findUserByMobileOrEmail)
 router.route("/search-user/:userId")    
-    .get(passport.authenticate('jwt', { session: false }),AccountService.findUserById)
+    .get(passport.authenticate('jwt', { session: false }),UserService.findUserById)
 
 
 router.route('/new')
-    .post(passport.authenticate('jwt', { session: false }),AccountService.signUpUser);
+    .post(passport.authenticate('jwt', { session: false }),UserService.signUpUser);
 router.route('/signin')
-    .post(passport.authenticate('local', { session: false }), AccountService.signInUser);
+    .post(passport.authenticate('local', { session: false }), UserService.signInUser);
 
 router.route('/pwd/change')
-    .put(passport.authenticate('jwt', { session: false }), AccountService.changePasswordAll);
+    .put(passport.authenticate('jwt', { session: false }), UserService.changePasswordAll);
 router.route('/pwd/reset')
-    .put(passport.authenticate('jwt', { session: false }),AccountService.adminResetPasswordAll);
+    .put(passport.authenticate('jwt', { session: false }),UserService.adminResetPasswordAll);
 router.route('/update-info/:userId')
-    .put(passport.authenticate('jwt', { session: false }),AccountService.adminResetPasswordAll,AccountService.updateInfoUser)
+    .put(passport.authenticate('jwt', { session: false }),UserService.adminResetPasswordAll,UserService.updateInfoUser)
 
-router.route('delete-user')
-    .delete(passport.authenticate('jwt', { session: false }),AccountService.deleteUser)
+router.route('/delete-user')
+    .delete(passport.authenticate('jwt', { session: false }),UserService.deleteUser)
 
 
 

@@ -8,7 +8,8 @@ const passport = require("passport");
 //const logger = require('morgan');
 
 const routerUser = require("./controllers/UserController");
-const routerDevice = require("./controllers/DeviceController")
+const routerDevice = require("./controllers/DeviceController");
+const routerAccount = require("./controllers/AccountController");
 
 const mongoose = require("mongoose");
 
@@ -96,6 +97,7 @@ app.use(bodyParser.json());
 //Routes
 app.use("/api/user", routerUser);
 app.use("/api/device",routerDevice);
+app.use("/api/account",routerAccount)
 
 //Catch 404 error and forward them to error handler
 app.use((req, res, next) => {
